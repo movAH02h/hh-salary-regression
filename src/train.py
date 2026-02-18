@@ -1,60 +1,35 @@
-import numpy as np
-import logging
-import joblib
 import os
+import joblib
+import logging
+import numpy as np
 from sklearn.ensemble import RandomForestRegressor
-from sklearn.metrics import mean_absolute_error, r2_score
-from sklearn.model_selection import train_test_split
 
 logger = logging.getLogger(__name__)
 
-def load_processed_data(data_dir):
+def train_and_save_model(x_data: np.ndarray, y_data: np.ndarray, model_dir: str) -> str:
     """
-      Загружает npy файлы, созданные в первом проекте.
+    Обучает модель RandomForestRegressor и сохраняет её веса в файл.
 
-      Аргументы:
-        data_dir (str): директория с файлами.
+    Args:
+        x_data (np.ndarray): Матрица признаков.
+        y_data (np.ndarray): Вектор целевой переменной (ЗП).
+        model_dir (str): Директория для сохранения модели.
 
-      Вернет:
-        Tuple[np.ndarray, np.ndarray]: Кортеж из (X_data, y_data)
+    Returns:
+        str: Полный путь к сохраненному файлу весов.
     """
-    x_path = os.path.join(data_dir, 'x_data.npy')
-    y_path = os.path.join(data_dir, 'y_data.npy')
-    
-    if not os.path.exists(x_path) or not os.path.exists(y_path):
-        raise FileNotFoundError("Массивы данных не найдены в папке data. Запустите сначала Проект №1.")
-    
-    return np.load(x_path), np.load(y_path)
+    if not os.path.exists(model_dir):
+        os.makedirs(model_dir)
 
-def train_regression_model(X, y):
-    """
-      Обучает RandomForestRegressor с учетом замечаний по коду.
+    model_file = "model_weights.pkl"
+    model_path = os.path.join(model_dir, model_file)
 
-      Арументы:
-        X (np.ndarray): Матрица признаков.
-        y (np.ndarray): Вектор целевой переменной.
-
-      Вернет:
-        Tuple[RandomForestRegressor, np.ndarray, np.ndarray, np.ndarray]:
-          обученная модель, X_test, y_test и предсказания y_pred.
-    """
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
-    
-    model = RandomForestRegressor(
-        n_estimators=100,
-        random_state=42,
-        n_jobs=-1,
-        min_samples_leaf=5,
-        max_features='sqrt'
-    )
+    model = RandomForestRegressor(n_estimators=100, random_state=42, n_jobs=-1)
     
     logger.info("Начинаю обучение модели регрессии...")
-    model.fit(X_train, y_train)
+    model.fit(x_data, y_data)
+
+    joblib.dump(model, model_path)
+    logger.info(f"Модель успешно обучена и сохранена в {model_file}")
     
-    y_pred = model.predict(X_test)
-    mae = mean_absolute_error(y_test, y_pred)
-    r2 = r2_score(y_test, y_pred)
-    
-    logger.info(f"Результаты: MAE = {mae:.2f}, R2 = {r2:.2f}")
-    
-    return model, X_test, y_test, y_pred
+    return model_path

@@ -10,12 +10,12 @@ def mock_app(x_path: str, model_dir: str, model_path: str) -> Union[List[float],
     """
     Имитирует работу приложения для предсказания на основе .npy файла.
 
-    Args:
+    Аргументы:
         x_path (str): Путь к файлу .npy с данными.
         model_dir (str): Директория модели (для вывода ошибки).
         model_path (str): Путь к сохраненным весам .pkl.
 
-    Returns:
+    Вернет:
         Union[List[float], str]: Список предсказаний или сообщение об ошибке.
     """
     try:

@@ -10,12 +10,12 @@ def train_and_save_model(x_data: np.ndarray, y_data: np.ndarray, model_dir: str)
     """
     Обучает модель RandomForestRegressor и сохраняет её веса в файл.
 
-    Args:
+    Аргументы:
         x_data (np.ndarray): Матрица признаков.
         y_data (np.ndarray): Вектор целевой переменной (ЗП).
         model_dir (str): Директория для сохранения модели.
 
-    Returns:
+    Вернет:
         str: Полный путь к сохраненному файлу весов.
     """
     if not os.path.exists(model_dir):
@@ -24,7 +24,13 @@ def train_and_save_model(x_data: np.ndarray, y_data: np.ndarray, model_dir: str)
     model_file = "model_weights.pkl"
     model_path = os.path.join(model_dir, model_file)
 
-    model = RandomForestRegressor(n_estimators=100, random_state=42, n_jobs=-1)
+    model = RandomForestRegressor(
+        n_estimators=100,
+        random_state=42,
+        n_jobs=-1,
+        min_samples_leaf=5,
+        max_features='sqrt'        
+    )
     
     logger.info("Начинаю обучение модели регрессии...")
     model.fit(x_data, y_data)

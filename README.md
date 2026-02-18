@@ -15,3 +15,6 @@
 2. Установите зависимости:
    ```bash
    pip install scikit-learn numpy matplotlib seaborn joblib
+
+
+Следующее ДЗ: https://github.com/movAH02h/hh-it-classification.git

@@ -1,1 +1,12 @@
+# Данные
+data/*.npy
+data/*.csv
 
+# Результаты обучения
+models/*.pkl
+models/*.png
+
+# Python
+__pycache__/
+.venv/
+.env

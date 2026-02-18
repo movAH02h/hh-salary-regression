@@ -1,1 +1,11 @@
+# Работа с данными и массивами
+pandas
+numpy
 
+# Машинное обучение
+scikit-learn
+joblib
+
+# Визуализация данных
+matplotlib
+seaborn
